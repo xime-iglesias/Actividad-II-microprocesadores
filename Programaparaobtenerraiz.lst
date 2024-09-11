@@ -1,0 +1,32 @@
+---------------------------------------------
+OSHONSOFT Z80 ASSEMBLER LISTING
+Line   Addr Opcode      Label   Instruction
+---------------------------------------------
+0001   0000                     ORG 0x1000        ; Inicio del programa en EEPROM
+0002   1000             
+0003   1000 78                  LD A, B           ; Cargar el número en BCD del registro B al A
+0004   1001 0E 00               LD C, 0           ; Inicializar C en 0 (C es nuetra variable para la raíz cuadrada)
+0005   1003 16 00               LD D, 0           ; D, para comparar posteriormente
+0006   1005             
+0007   1005                     ; Ciclo para encontrar la raíz cuadrada entera
+0008   1005             LOOP:
+0009   1005 51                  LD D, C           ; Cargar el valor actual de C en D
+0010   1006 7A                  LD A, D           ; Guardar el valor de D en A ya que lo multiplicarémos
+0011   1007 CD 15 10            CALL SQUARE       ; Ir a la parte del código que calcula D * D
+0012   100A B8                  CP B              ; Comparar el resultado de la multiplicación con el valor en B
+0013   100B D2 12 10            JP NC, FIN        ; Si es mayor o igual, saltar al final
+0014   100E 0C                  INC C             ; Aumentar C para probar el siguiente número
+0015   100F C3 05 10            JP LOOP           ; Repite el ciclo
+0016   1012             
+0017   1012             FIN:
+0018   1012 0D                  DEC C             ; Decrementar C si es necesario
+0019   1013 00                  NOP               ; No operación, solo para "rellenar"
+0020   1014 76                  HALT              ; Evita que se ejecute una y otra vez
+0021   1015             
+0022   1015             ; Parte que multiplica D * D
+0023   1015             SQUARE:
+0024   1015 26 00               LD H, 0           ; Inicializar H en 0
+0025   1017 6A                  LD L, D           ; Guardar D en L
+0026   1018 29                  ADD HL, HL        ; Sumar HL consigo mismo (esto es como multiplicar por 2)
+0027   1019 C9                  RET               ; Regresar al ciclo principal
+Number of errors = 0
